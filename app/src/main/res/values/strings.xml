@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">QuranApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="masjid_terdekat">Masjid Terdekat</string>
+    <string name="daftar_surah">Daftar Surah</string>
+    <string name="keterangan">keterangan</string>
+    <string name="jadwal_sholat">jadwal sholat</string>
+    <string name="dhuhur">dhuhur</string>
+    <string name="maghrib">maghrib</string>
+    <string name="isya">isya</string>
+</resources>
