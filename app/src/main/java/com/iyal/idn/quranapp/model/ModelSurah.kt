@@ -12,6 +12,9 @@ class ModelSurah: Serializable {
     var ayat: String? = null
 
     @JvmField
+    var nama: String? = null
+
+    @JvmField
     var type: String? = null
     var audio: String? = null
 
