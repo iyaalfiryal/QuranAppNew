@@ -1,6 +1,7 @@
 package com.iyal.idn.quranapp.activity
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -46,6 +47,7 @@ class ListSurah : AppCompatActivity() , SurahAdapter.onSelectDataa {
     var locationCallback: LocationCallback? = null
 
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.list_surah)
@@ -61,8 +63,8 @@ class ListSurah : AppCompatActivity() , SurahAdapter.onSelectDataa {
         hariIni = DateFormat.format("EEEE", dateNow)
                 as String
         tanggal = DateFormat.format("d MMMM yyyy", dateNow) as String
-        tvToday.setText("$hariIni, ")
-        tvDate.setText(tanggal)
+        tvToday.text = hariIni
+        tvDate.text = tanggal
 
         val sendDetail = FragmentJadwalSholat.newInstance("detail")
         llTime.setOnClickListener(View.OnClickListener {
@@ -216,9 +218,11 @@ class ListSurah : AppCompatActivity() , SurahAdapter.onSelectDataa {
             }
             val currentAdd = resultData.getString("address_result")
             showResults(currentAdd) } }
+
     private fun showResults(currentAdd: String?) {
         txtLocation!!.text = currentAdd
     }
+
     override fun onResume() {
         super.onResume()
         startLocationUpdates()

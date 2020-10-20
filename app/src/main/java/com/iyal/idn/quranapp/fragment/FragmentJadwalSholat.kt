@@ -1,5 +1,6 @@
 package com.iyal.idn.quranapp.fragment
 
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.graphics.Color
 import android.os.Bundle
@@ -7,10 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.ProgressBar
-import android.widget.Spinner
+import android.widget.*
 import androidx.core.content.ContextCompat
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.iyal.idn.quranapp.R
@@ -134,6 +132,7 @@ class FragmentJadwalSholat : BottomSheetDialogFragment() {
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun loadJadwal(id: Int?) {
         try {
             progressDialog!!.show()
@@ -158,6 +157,7 @@ class FragmentJadwalSholat : BottomSheetDialogFragment() {
                         tv_isya.text = obData.getString("isya")
                     } catch (e: JSONException) {
                         e.printStackTrace()
+
                     }
                 }
             })
