@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.Nullable
 import androidx.core.content.ContextCompat
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.iyal.idn.quranapp.R
@@ -29,12 +30,24 @@ class FragmentJadwalSholat : BottomSheetDialogFragment() {
     private var mDaftarKotaAdapter: ArrayAdapter<DaftarKota>? = null
     var progressDialog: ProgressDialog? = null
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onActivityCreated(@Nullable savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         (view!!.parent as View).setBackgroundColor(Color.TRANSPARENT)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    companion object {
+        @JvmStatic
+        fun newInstance(string: String?): FragmentJadwalSholat {
+            val f = FragmentJadwalSholat()
+            val args = Bundle()
+            args.putString("detail", string)
+            f.arguments = args
+            return f
+        }
+    }
+
+
+    override fun onCreate(@Nullable savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mString = arguments!!.getString("detail")
 
@@ -58,7 +71,8 @@ class FragmentJadwalSholat : BottomSheetDialogFragment() {
         listDaftarKota = ArrayList()
         mDaftarKotaAdapter = ArrayAdapter(
             activity!!
-                .applicationContext, android.R.layout.simple_spinner_item,
+                .applicationContext,
+            android.R.layout.simple_spinner_item,
             listDaftarKota as ArrayList<DaftarKota>
         )
         mDaftarKotaAdapter!!.setDropDownViewResource(
@@ -68,9 +82,7 @@ class FragmentJadwalSholat : BottomSheetDialogFragment() {
 
         spKota.adapter = mDaftarKotaAdapter
         spKota.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                TODO("Not yet implemented")
-            }
+            override fun onNothingSelected(p0: AdapterView<*>?) {}
 
             override fun onItemSelected(p0: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val spinKota = mDaftarKotaAdapter!!.getItem(position)
@@ -100,37 +112,6 @@ class FragmentJadwalSholat : BottomSheetDialogFragment() {
 
     }
 
-    private fun loadKota() {
-        try {
-            progressDialog!!.show()
-            val url = "https://api.banghasan.com/sholat/format/json/kota"
-            val task = ClientAsyncTask(this, object
-                : ClientAsyncTask.OnPostExecuteListener {
-                override fun onPostExecute(result: String) {
-                    try {
-                        progressDialog!!.dismiss()
-                        val jsonObj = JSONObject(result)
-                        val jsonArray = jsonObj.getJSONArray("kota")
-                        var daftarKota: DaftarKota?
-                        for (i in 0 until jsonArray.length()) {
-                            val obj = jsonArray.getJSONObject(i)
-                            daftarKota = DaftarKota()
-                            daftarKota.id = obj.getInt("id")
-                            daftarKota.nama = obj.getString("nama")
-                            listDaftarKota!!.add(daftarKota)
-                        }
-                        mDaftarKotaAdapter!!.notifyDataSetChanged()
-                    } catch (e: JSONException) {
-                        e.printStackTrace()
-                    }
-                }
-
-            })
-            task.execute(url)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
 
     @SuppressLint("SimpleDateFormat")
     private fun loadJadwal(id: Int?) {
@@ -166,16 +147,37 @@ class FragmentJadwalSholat : BottomSheetDialogFragment() {
             e.printStackTrace()
         }
     }
+    private fun loadKota() {
+        try {
+            progressDialog!!.show()
+            val url = "https://api.banghasan.com/sholat/format/json/kota"
+            val task = ClientAsyncTask(this, object
+                : ClientAsyncTask.OnPostExecuteListener {
+                override fun onPostExecute(result: String) {
+                    try {
+                        progressDialog!!.dismiss()
+                        val jsonObj = JSONObject(result)
+                        val jsonArray = jsonObj.getJSONArray("kota")
+                        var daftarKota: DaftarKota?
+                        for (i in 0 until jsonArray.length()) {
+                            val obj = jsonArray.getJSONObject(i)
+                            daftarKota = DaftarKota()
+                            daftarKota.id = obj.getInt("id")
+                            daftarKota.nama = obj.getString("nama")
+                            listDaftarKota!!.add(daftarKota)
+                        }
+                        mDaftarKotaAdapter!!.notifyDataSetChanged()
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                    }
+                }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(string: String?): FragmentJadwalSholat {
-            val f = FragmentJadwalSholat()
-            val args = Bundle()
-            args.putString("detail", string)
-            f.arguments = args
-            return f
+            })
+            task.execute(url)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
+
 
 }
